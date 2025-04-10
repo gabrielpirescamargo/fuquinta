@@ -27,7 +27,7 @@ export default function App() {
     },
     {
       name: 'PINTO DE NEGÃO',
-      players: ['Math', 'De', 'Neves', 'Olavo', 'Mizuno'],
+      players: ['Matheus', 'André', 'Neves', 'Olavo', 'Mizuno'],
     },
     {
       name: 'CU DO PIRECO',
@@ -95,7 +95,6 @@ export default function App() {
         </div>
       ) : (
         <>
-        
           <MatchController
             teams={teams}
             resetLocalStorage={resetLocalStorage}
