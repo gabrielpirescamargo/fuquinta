@@ -4,6 +4,7 @@ export default function MatchController({
   teams,
   addToHistory,
   selectedTeams,
+  resetLocalStorage,
 }) {
   const [currentTeams, setCurrentTeams] = useState(selectedTeams);
   const waitingTeam = useMemo(() => {
@@ -78,6 +79,12 @@ export default function MatchController({
           </div>
         ))}
       </div>
+      <button
+        onClick={resetLocalStorage}
+        style={{ marginBottom: '1rem', width: '100%' }}
+      >
+        🔄 Resetar Semana
+      </button>
     </div>
   );
 }

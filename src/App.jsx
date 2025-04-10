@@ -1,7 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TeamSetup from './components/TeamSetup';
 import MatchController from './components/MatchController';
 import MatchHistory from './components/MatchHistory';
+
+const LOCAL_STORAGE_KEY = 'fuquinta-data';
+
+const saveToLocalStorage = (data) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+};
+
+const loadFromLocalStorage = () => {
+  const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+  return saved ? JSON.parse(saved) : null;
+};
+
+const resetLocalStorage = () => {
+  localStorage.removeItem(LOCAL_STORAGE_KEY);
+  window.location.reload(); // reinicia tudo
+};
 
 export default function App() {
   const defaultTeams = [
@@ -19,12 +35,28 @@ export default function App() {
     },
   ];
 
-  const [teams, setTeams] = useState(defaultTeams);
-  const [selectedTeams, setSelectedTeams] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [matchStarted, setMatchStarted] = useState(false);
+  const savedData = loadFromLocalStorage();
+
+  const [teams, setTeams] = useState(savedData?.teams || defaultTeams);
+  const [selectedTeams, setSelectedTeams] = useState(
+    savedData?.selectedTeams || []
+  );
+  const [history, setHistory] = useState(savedData?.history || []);
+  const [matchStarted, setMatchStarted] = useState(
+    savedData?.matchStarted || false
+  );
+
+  useEffect(() => {
+    saveToLocalStorage({
+      teams,
+      selectedTeams,
+      history,
+      matchStarted,
+    });
+  }, [teams, selectedTeams, history, matchStarted]);
+
   const startMatch = () => setMatchStarted(true);
-  console.log(selectedTeams);
+
   return (
     <div className='app-container'>
       <h1 className='title'>Fuquinta</h1>
@@ -43,7 +75,14 @@ export default function App() {
                 className={`team-button ${
                   selectedTeams.includes(idx) ? 'selected' : ''
                 }`}
-                onClick={() => setSelectedTeams((prev) => [...prev, idx])}
+                onClick={() => {
+                  if (
+                    !selectedTeams.includes(idx) &&
+                    selectedTeams.length < 2
+                  ) {
+                    setSelectedTeams((prev) => [...prev, idx]);
+                  }
+                }}
               >
                 {team.name}
               </div>
@@ -56,8 +95,10 @@ export default function App() {
         </div>
       ) : (
         <>
+        
           <MatchController
             teams={teams}
+            resetLocalStorage={resetLocalStorage}
             initialTeams={selectedTeams}
             addToHistory={setHistory}
             selectedTeams={selectedTeams}
