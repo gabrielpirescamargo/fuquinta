@@ -16,22 +16,22 @@ const loadFromLocalStorage = () => {
 
 const resetLocalStorage = () => {
   localStorage.removeItem(LOCAL_STORAGE_KEY);
-  window.location.reload(); // reinicia tudo
+  window.location.reload();
 };
 
 export default function App() {
   const defaultTeams = [
     {
-      name: 'BUCETA ESFOLADA',
-      players: ['Betim', 'Tineli', 'Rossi', 'Pato', 'Barbarini'],
+      name: 'BOMBARDINO CROCCODRILO',
+      players: ['Neves', 'Milani', 'Rossi', 'Math ale', 'Pato', 'Nick'],
     },
     {
-      name: 'PINTO DE NEGÃO',
-      players: ['Matheus', 'André', 'Neves', 'Olavo', 'Mizuno'],
+      name: 'TUNG TUNG SAHUR',
+      players: ['Arthur', 'Pires', 'Luan', 'Davi', 'Mizuno', 'Kevin'],
     },
     {
-      name: 'CU DO PIRECO',
-      players: ['Pires', 'Vini', 'Jordão', 'Pelisson', 'Murilo'],
+      name: 'SHIMPAZINNI BANANINNI',
+      players: ['Zampar', 'Vini', 'Murilo', 'Pelisson', 'Chuera', 'Tineli'],
     },
   ];
 
@@ -56,6 +56,8 @@ export default function App() {
   }, [teams, selectedTeams, history, matchStarted]);
 
   const startMatch = () => setMatchStarted(true);
+
+  const endMatch = () => setMatchStarted(false);
 
   return (
     <div className='app-container'>
@@ -101,6 +103,7 @@ export default function App() {
             initialTeams={selectedTeams}
             addToHistory={setHistory}
             selectedTeams={selectedTeams}
+            onMatchEnd={endMatch}
           />
           <MatchHistory history={history} />
         </>

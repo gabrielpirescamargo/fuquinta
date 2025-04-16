@@ -5,6 +5,7 @@ export default function MatchController({
   addToHistory,
   selectedTeams,
   resetLocalStorage,
+  onMatchEnd, // ✨ Nova prop
 }) {
   const [currentTeams, setCurrentTeams] = useState(selectedTeams);
   const waitingTeam = useMemo(() => {
@@ -14,17 +15,23 @@ export default function MatchController({
   const [scores, setScores] = useState([0, 0]);
   const [time, setTime] = useState(420); // 7 min = 420s
   const [goalScorers, setGoalScorers] = useState({});
+  const [isPaused, setIsPaused] = useState(false); // ✨ Controle da pausa
 
   useEffect(() => {
+    if (isPaused) return;
+
     const interval = setInterval(() => {
       setTime((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   useEffect(() => {
+    if (isPaused) return;
+
     if (scores.some((score) => score >= 2) || time <= 0) {
+      // salva histórico
       addToHistory((prev) => [
         ...prev,
         {
@@ -49,13 +56,13 @@ export default function MatchController({
       const nextTeams = [currentTeams[winnerIndex], nextIn];
 
       setCurrentTeams(nextTeams);
-      setScores([0, 0]);
-      setTime(420);
-      setGoalScorers({});
+      setIsPaused(true); // ⏸️ Pausa
     }
-  }, [scores, time]);
+  }, [scores, time, isPaused]);
 
   const addGoal = (teamIndex, playerName) => {
+    if (isPaused) return;
+
     setScores((prev) => {
       const updated = [...prev];
       updated[teamIndex]++;
@@ -68,13 +75,26 @@ export default function MatchController({
     }));
   };
 
+  const startNextMatch = () => {
+    setScores([0, 0]);
+    setTime(420);
+    setGoalScorers({});
+    setIsPaused(false);
+  };
+
   return (
     <div className='scoreboard'>
       <h2 className='scoreboard-title'>Placar da Partida</h2>
+
       <div className='timer'>
-        Tempo restante: {Math.floor(time / 60)}:
-        {(time % 60).toString().padStart(2, '0')}
+        Tempo restante:{' '}
+        {isPaused
+          ? 'Pausado'
+          : `${Math.floor(time / 60)}:${(time % 60)
+              .toString()
+              .padStart(2, '0')}`}
       </div>
+
       <div className='scoreboard-grid'>
         {currentTeams.map((teamIndex, i) => (
           <div key={teamIndex} className='team-card'>
@@ -98,11 +118,26 @@ export default function MatchController({
           </div>
         ))}
       </div>
+
+      {isPaused ? (
+        <button
+          onClick={startNextMatch}
+          style={{
+            marginTop: '1rem',
+            width: '100%',
+            marginBottom: 24,
+            background: 'green',
+          }}
+        >
+          Começar próxima partida
+        </button>
+      ) : null}
+
       <button
         onClick={resetLocalStorage}
-        style={{ marginBottom: '1rem', width: '100%' }}
+        style={{ marginBottom: '1rem', width: '100%', background: 'red' }}
       >
-        🔄 Resetar Semana
+        Resetar Semana
       </button>
     </div>
   );
