@@ -90,6 +90,17 @@ export default function App() {
               </div>
             ))}
           </div>
+          <button
+            onClick={resetLocalStorage}
+            style={{
+              marginBottom: '1rem',
+              width: '100%',
+              background: 'red',
+              marginTop: 32,
+            }}
+          >
+            Resetar Semana
+          </button>
         </div>
       ) : !matchStarted ? (
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
