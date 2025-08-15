@@ -22,16 +22,16 @@ const resetLocalStorage = () => {
 export default function App() {
   const defaultTeams = [
     {
-      name: 'BOMBARDINO CROCCODRILO',
-      players: ['Neves', 'Milani', 'Rossi', 'Math ale', 'Pato', 'Nick'],
+      name: 'TIME VINICIUS',
+      players: ['Vinícius', 'Franco', 'Enzo', 'Piruka', 'Fi', 'xiram'],
     },
     {
-      name: 'TUNG TUNG SAHUR',
-      players: ['Arthur', 'Pires', 'Luan', 'Davi', 'Mizuno', 'Kevin'],
+      name: 'TIME ZÉ',
+      players: ['Zé', 'Pires', 'Math ale', 'Kauã', 'Dazo', 'Mauricio'],
     },
     {
-      name: 'SHIMPAZINNI BANANINNI',
-      players: ['Zampar', 'Vini', 'Murilo', 'Pelisson', 'Chuera', 'Tineli'],
+      name: 'TIME PEDRÃO',
+      players: ['Pedrão', 'Liam', 'Pescador', 'Lucão', 'Gustavo', 'Samuel'],
     },
   ];
 
